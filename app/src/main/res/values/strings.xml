@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Vaasa Weather</string>
+    <string name="tab_text_1">Varoitukset</string>
+    <string name="tab_text_2">Lämpötila</string>
+    <string name="tab_text_3">Merenpinnan korkeus</string>
+    <string name="fragment1_title">Aktiiviset varoitukset:</string>
+    <string name="fragment2_title">Lämpötila:</string>
+    <string name="fragment3_title">Merenpinnan korkeus:</string>
+</resources>
