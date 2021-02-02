@@ -15,11 +15,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.japsu.vaasaweather.ui.main.SectionsPagerAdapter;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -39,6 +45,7 @@ public class MainActivity extends AppCompatActivity
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view ->
         {
+            Alerts.GetAlerts();
             String body = ("<small>App version: " + Constants.version + "\nDevice Manufacturer: " + Build.MANUFACTURER + "\nDevice Model: " + Build.MODEL + "\nAndroid Version: " + Build.VERSION.RELEASE + "</small>\nLeave the info above untouched, thank you! :)\n\n<b>Please write your feedback here:</b>").replace("\n", "<br/>");
             String uriText = "mailto:japsu.honkasalo@gmail.com" + "?subject=" + Uri.encode("Feedback on Vaasa Weather app!") + "&body=" + Uri.encode(body);
 
@@ -55,5 +62,21 @@ public class MainActivity extends AppCompatActivity
                 Snackbar.make(view, e.toString(), Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
+    }
+
+    public static void UpdateWarnings(List<String> warnings)
+    {
+        Log.d("XML", "XML data vastaanotettu:\n");
+        if(warnings.size() != 1)
+        {
+            for (int i = 0; i < warnings.size(); i++)
+            {
+                Log.d("XML", warnings.get(i));
+            }
+        }
+        else
+            {
+                Log.d("XML", "Ei varoituksia.");
+            }
     }
 }
