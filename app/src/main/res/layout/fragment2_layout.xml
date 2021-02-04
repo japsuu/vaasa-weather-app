@@ -18,12 +18,58 @@
         android:textSize="30sp"
         android:textStyle="bold">
     </TextView>
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center_horizontal"
-        android:padding="20dp"
-        android:text="Data tulee tähän"
-        android:textColor="#424242">
-    </TextView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_weight="1">
+        <Button
+            android:id="@+id/tempUpdateBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tempUpdateBtn">
+        </Button>
+        <TextView
+            android:id="@+id/curTemperature"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Tämänhetkinen:"
+            android:textSize="30sp"
+            android:textColor="#118316"
+            android:gravity="center">
+        </TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="start"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/maxTemperature"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Päivän korkein"
+            android:textSize="30sp"
+            android:textColor="#D60000"
+            android:gravity="center">
+        </TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="start"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/minTemperature"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Päivän matalin"
+            android:textSize="30sp"
+            android:textColor="#0037C5"
+            android:gravity="center">
+        </TextView>
+    </LinearLayout>
 </LinearLayout>
