@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -28,7 +26,7 @@
             android:id="@+id/tempUpdateBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tempUpdateBtn">
+            android:text="@string/updateBtn">
         </Button>
         <TextView
             android:id="@+id/curTemperature"
@@ -50,7 +48,7 @@
             android:id="@+id/maxTemperature"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Päivän korkein"
+            android:text="Päivän korkein:"
             android:textSize="30sp"
             android:textColor="#D60000"
             android:gravity="center">
@@ -66,7 +64,7 @@
             android:id="@+id/minTemperature"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Päivän matalin"
+            android:text="Päivän matalin:"
             android:textSize="30sp"
             android:textColor="#0037C5"
             android:gravity="center">

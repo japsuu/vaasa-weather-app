@@ -6,5 +6,5 @@
     <string name="fragment1_title">Aktiiviset varoitukset:</string>
     <string name="fragment2_title">Lämpötila:</string>
     <string name="fragment3_title">Merenpinnan korkeus:</string>
-    <string name="tempUpdateBtn">Päivitä</string>
+    <string name="updateBtn">Päivitä</string>
 </resources>
