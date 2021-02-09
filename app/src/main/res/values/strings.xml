@@ -7,4 +7,6 @@
     <string name="fragment2_title">Lämpötila:</string>
     <string name="fragment3_title">Merenpinnan korkeus:</string>
     <string name="updateBtn">Päivitä</string>
+    <string name="warnings_switch_left">Vaasa/Pohjanmaa</string>
+    <string name="warnings_switch_right">Koko maa</string>
 </resources>
