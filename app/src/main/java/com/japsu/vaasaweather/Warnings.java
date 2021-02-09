@@ -24,12 +24,12 @@ import javax.xml.parsers.ParserConfigurationException;
 class TaskParams
 {
     URL url;
-    boolean isChecked;
+    boolean state;
 
     TaskParams(URL url, boolean isChecked)
     {
         this.url = url;
-        this.isChecked = isChecked;
+        this.state = isChecked;
     }
 }
 
@@ -55,7 +55,7 @@ class DownloadWarnings extends AsyncTask<TaskParams, Integer, List<String>>
     protected List<String> doInBackground(TaskParams... params)
     {
         URL urls = params[0].url;
-        boolean isChecked = params[0].isChecked;
+        boolean isChecked = params[0].state;
 
         List<String> result = new ArrayList<String>();
         Document doc = null;

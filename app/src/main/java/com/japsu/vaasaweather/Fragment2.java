@@ -32,13 +32,13 @@ public class Fragment2 extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        Temperature.GetTemperature();
+        Temperature.GetTemperature(false);
         View view = inflater.inflate(R.layout.fragment2_layout, container, false);
         curTempView = (TextView) view.findViewById(R.id.curTemperature);
         maxTempView = (TextView) view.findViewById(R.id.maxTemperature);
         minTempView = (TextView) view.findViewById(R.id.minTemperature);
         updateBtn = view.findViewById(R.id.tempUpdateBtn);
-        updateBtn.setOnClickListener(v -> Temperature.GetTemperature());
+        updateBtn.setOnClickListener(v -> Temperature.GetTemperature(false));
 
         return view;
     }

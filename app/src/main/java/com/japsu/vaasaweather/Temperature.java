@@ -1,5 +1,6 @@
 package com.japsu.vaasaweather;
 
+import android.app.AlarmManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -16,12 +17,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 public class Temperature
 {
-    public static void GetTemperature()
+    public static void GetTemperature(boolean isBackgroundTask)
     {
         try
         {
             //start a new async event for downloading the document
-            new DownloadTemperature().execute(new URL("https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::observations::weather::multipointcoverage&place=vaasa&starttime=STARTTIMEHERET00:00:00Z&endtime=CURRENTDATEHERETCURRENTTIMEHEREZ&Parameters=temperature"));
+            new DownloadTemperature().execute(new TaskParams(new URL("https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::observations::weather::multipointcoverage&place=vaasa&starttime=STARTTIMEHERET00:00:00Z&endtime=CURRENTDATEHERETCURRENTTIMEHEREZ&Parameters=temperature"), isBackgroundTask));
         }
         catch (MalformedURLException e)
         {
@@ -30,12 +31,11 @@ public class Temperature
     }
 }
 
-class DownloadTemperature extends AsyncTask<URL, Integer, Double[]>
+class DownloadTemperature extends AsyncTask<TaskParams, Integer, Double[]>
 {
     @Override
-    protected Double[] doInBackground(URL... urls)
+    protected Double[] doInBackground(TaskParams... params)
     {
-        Fragment2.UpdateTextfields("Ladataan...");
         String str = "";
         Document doc = null;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -45,14 +45,12 @@ class DownloadTemperature extends AsyncTask<URL, Integer, Double[]>
         Date date = new Date();
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        Log.d("TEMP", "Current date: " + dateFormatter.format(date));
-        Log.d("TEMP", "Current time: " + timeFormatter.format(date).replace("_", "T"));
 
         //try to download the document
         try
         {
             db = dbf.newDocumentBuilder();
-            doc = db.parse(new URL(urls[0].toString().replace("STARTTIMEHERE", dateFormatter.format(date)).replace("CURRENTDATEHERETCURRENTTIMEHERE", timeFormatter.format(date).replace("_", "T"))).openStream());
+            doc = db.parse(new URL(params[0].url.toString().replace("STARTTIMEHERE", dateFormatter.format(date)).replace("CURRENTDATEHERETCURRENTTIMEHERE", timeFormatter.format(date).replace("_", "T"))).openStream());
         }
         catch (Exception e)
         {
@@ -74,24 +72,51 @@ class DownloadTemperature extends AsyncTask<URL, Integer, Double[]>
         str = str.substring(0, str.length() - 1);
         temps = str.split(";");
 
-        //convert the resulting string array to a double array
-        Double[] result = new Double[temps.length];
-        for(int i = 0; i < temps.length; i++)
+        //if it's a background task (called for a notification, we have no UI available)
+        if(params[0].state)
         {
-            result[i] = Double.parseDouble(temps[i]);
-        }
+            double minValue = 99.99;
+            for(int i = 0; i < temps.length; i++)
+            {
+                if(Double.parseDouble(temps[i]) < minValue)
+                {
+                    minValue = Double.parseDouble(temps[i]);
+                }
+            }
 
-        //return the double array to onPostExecute
-        return result;
+            Double[] result = new Double[1];
+            result[0] = minValue;
+
+            //return the double array to onPostExecute
+            return result;
+        }
+        else
+        {
+            //convert the resulting string array to a double array
+            Double[] result = new Double[temps.length];
+            for(int i = 0; i < temps.length; i++)
+            {
+                result[i] = Double.parseDouble(temps[i]);
+            }
+            //return the double array to onPostExecute
+            return result;
+        }
     }
 
     @Override
     protected void onPostExecute(Double[] result)
     {
-        //if the result contains something, we pass it to the corresponding "page's" (fragment's) handling method
+        //if the result contains something, we pass it to the corresponding "page's" (fragment's) handling method, or if the size is only 1 element we know it's a background update 4 a notification!
         if(result != null)
         {
-            Fragment2.UpdateTextfields(result);
+            if(result.length == 1)
+            {
+                AlarmReceiver.deliverNotification(AlarmReceiver.cntxt, result[0]);
+            }
+            else
+            {
+                Fragment2.UpdateTextfields(result);
+            }
         }
         else
         {

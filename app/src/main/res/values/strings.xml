@@ -13,4 +13,16 @@
     <string name="fragment4_title"><![CDATA[Asetukset & info]]></string>
     <string name="notificationSwitch_left">Ilmoitukset pois</string>
     <string name="notificationSwitch_right">Ilmoitukset päällä</string>
+    <string name="Notification_info">Sovellus voi halutessasi ilmoittaa sinulle joka päivä aamuviideltä ennen töihin lähtöä, mikäli yöllä on ollut pakkasta ja tiet voivat olla jäässä. Voit kytkeä ominaisuuden päälle/pois alta.</string>
+    <string name="info_main">Tämän sovelluksen on kehittänyt <b>Jasper Honkasalo</b> ilmaiseksi Vaasalaisille. Ja miksei muillekin!\n<b>Voit halutessasi kannustaa vastaavien ilmaisten sovellusten kehitystä esimerkiksi lahjoittamalla jollakin alla olevista tavoista :)</b></string>
+    <string name="info_paypal"><b>Paypal:</b>\njapsu.honkasalo@gmail.com</string>
+    <string name="info_btc"><b>Bitcoin:</b>\n3NMsa1gt7vuD1AEkpjyeJkhwWsyxCHX97u</string>
+    <string name="info_ltc"><b>Litecoin:</b>\nMUgwzGJzeeb9KmjsRK2n47CAH78a3JHekt</string>
+    <string name="info_faq_title">FAQ:</string>
+    <string name="info_faq_1">Minulla on hieno uusi idea tai parannus sovellukseesi!</string>
+    <string name="info_faq_1_answer">-Katsotaan mitä voin tehdä asian eteen! Voit ottaa minuun yhteyttä joko edellämainitusta sähköpostiosoitteesta, tai painaa oikeassa alanurkassa olevaa kirjeen kuvaa!</string>
+    <string name="info_faq_2">Mistä sovelluksen käyttämä data ja tieto tulee?</string>
+    <string name="info_faq_2_answer">-Ilmatieteenlaitoksen avoimesta datasta, jota kuka vain sovelluskehittäjä saa käyttää!</string>
+    <string name="info_faq_3">Miten voin raportoida mahdollisesta bugista tai virheestä?</string>
+    <string name="info_faq_3_answer">-Paina oikeassa alanurkassa olevaa kirjeenkuvaa, tämä avaa palautelomakkeen!</string>
 </resources>

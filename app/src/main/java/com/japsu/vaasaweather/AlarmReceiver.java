@@ -10,28 +10,38 @@ import androidx.core.app.NotificationCompat;
 
 public class AlarmReceiver extends BroadcastReceiver
 {
-    private NotificationManager mNotificationManager;
+    private static NotificationManager mNotificationManager;
     private static final int NOTIFICATION_ID = 0;
 
     // Notification channel ID.
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
 
+    //store context for Temperature handler
+    public static Context cntxt = null;
+
     @Override
     public void onReceive(Context context, Intent intent)
     {
+        cntxt = context;
         mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        deliverNotification(context);
+        Temperature.GetTemperature(true);
+        //deliverNotification(context);
     }
 
-    private void deliverNotification(Context context)
+    public static void deliverNotification(Context context, double temp)
     {
-        Intent contentIntent = new Intent(context, MainActivity.class);
+        Intent contentIntent = new Intent(cntxt, MainActivity.class);
         PendingIntent contentPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if(temp > 0)
+        {
+            return;
+        }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setContentTitle("Jäätämisvaroitus")
-                .setContentText("Yön aikana on ollut pakkasta, aja varoen!")
+                .setContentText("Yön aikana on ollut " + temp + " pakkasta, aja varoen!")
                 .setContentIntent(contentPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)

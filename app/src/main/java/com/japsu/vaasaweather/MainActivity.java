@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -75,12 +76,19 @@ public class MainActivity extends AppCompatActivity
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view ->
         {
+            /*
             String body = ("<small>App version: " + Constants.version + "\nDevice Manufacturer: " + Build.MANUFACTURER + "\nDevice Model: " + Build.MODEL + "\nAndroid Version: " + Build.VERSION.RELEASE + "</small>\nLeave the info above untouched, thank you! :)\n\n<b>Please write your feedback here:</b>").replace("\n", "<br/>");
             String uriText = "mailto:japsu.honkasalo@gmail.com" + "?subject=" + Uri.encode("Feedback on Vaasa Weather app!") + "&body=" + Uri.encode(body);
 
             Uri data = Uri.parse(uriText);
             Intent intent = new Intent(Intent.ACTION_SENDTO);
-            intent.setData(data);
+            intent.setData(data);*/
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/html");
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"japsu.honkasalo@gmail.com"});
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Vaasa Weather app!");
+            intent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("<small>App version: " + Constants.version + "<br/>Device Manufacturer: " + Build.MANUFACTURER + "<br/>Device Model: " + Build.MODEL + "<br/>Android Version: " + Build.VERSION.RELEASE + "</small><br/>Leave the info above untouched, thank you! :)<br/><br/><b>Please write your feedback here:</b>"));
 
             try
             {
@@ -102,26 +110,45 @@ public class MainActivity extends AppCompatActivity
 
     static void onCheckedChanged(boolean checked)
     {
-        long repeatInterval = AlarmManager.INTERVAL_FIFTEEN_MINUTES / 15;
-        long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
+        SharedPreferences prefs = context.getSharedPreferences("Settings", MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("notificationsOn", checked);
+        edit.apply();
+
+        //long repeatInterval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+        //long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 5);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        //long repeatInterval = AlarmManager.INTERVAL_DAY;
+        long triggerTime = calendar.getTimeInMillis();
+
+        // To avoid firing the alarm if the time is passed while setting
+        if (System.currentTimeMillis() > triggerTime)
+        {
+            triggerTime = triggerTime + 24 * 60 * 60 * 1000;
+        }
 
         if(alarmManager != null)
         {
             if(checked)
             {
                 Log.d("NOTIFICATIONS", "Notifications are now turned on!");
-                Toast toast = Toast.makeText(context, "Notifications are now turned on!", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.TOP, 0, 60);
-                toast.show();
-                alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, notifyPendingIntent);
+                //Toast toast = Toast.makeText(context, "Notifications are now turned on!", Toast.LENGTH_LONG);
+                //toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.TOP, 0, 60);
+                //toast.show();
+                //alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, notifyPendingIntent);
+                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, triggerTime, 24 * 60 * 60 * 1000, notifyPendingIntent);
             }
             else
             {
                 mNotificationManager.cancelAll();
                 Log.d("NOTIFICATIONS", "Notifications are now turned off!");
-                Toast toast = Toast.makeText(context, "Notifications are now turned off!", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.TOP, 0, 60);
-                toast.show();
+                //Toast toast = Toast.makeText(context, "Notifications are now turned off!", Toast.LENGTH_LONG);
+                //toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.TOP, 0, 60);
+                //toast.show();
                 alarmManager.cancel(notifyPendingIntent);
             }
         }

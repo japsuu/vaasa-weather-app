@@ -1,6 +1,8 @@
 package com.japsu.vaasaweather;
 
 import android.app.PendingIntent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,15 +31,12 @@ public class Fragment4 extends Fragment
                 MainActivity.onCheckedChanged(isChecked);
             });
         }
-        boolean alarmUp = (PendingIntent.getBroadcast(MainActivity.context, MainActivity.NOTIFICATION_ID, MainActivity.notifyIntent, PendingIntent.FLAG_NO_CREATE) != null);
-        Fragment4.setSwitchState(alarmUp);
+        //boolean alarmOn = (PendingIntent.getBroadcast(MainActivity.context, MainActivity.NOTIFICATION_ID, MainActivity.notifyIntent, PendingIntent.FLAG_NO_CREATE) != null);
+        SharedPreferences prefs = this.getContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        boolean alarmOn = prefs.getBoolean("notificationsOn", true);
+        notificationSwitch.setChecked(alarmOn);
 
         return view;
-    }
-
-    public static void setSwitchState(boolean isOn)
-    {
-        notificationSwitch.setChecked(isOn);
     }
 }
 
