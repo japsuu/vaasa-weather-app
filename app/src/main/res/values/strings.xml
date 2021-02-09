@@ -2,11 +2,15 @@
     <string name="app_name">Vaasa Weather</string>
     <string name="tab_text_1">Varoitukset</string>
     <string name="tab_text_2">Lämpötila</string>
-    <string name="tab_text_3">Merenpinnan korkeus</string>
+    <string name="tab_text_3">Meren korkeus</string>
+    <string name="tab_text_4"><![CDATA[Asetukset & info]]></string>
     <string name="fragment1_title">Aktiiviset varoitukset:</string>
     <string name="fragment2_title">Lämpötila:</string>
     <string name="fragment3_title">Merenpinnan korkeus:</string>
     <string name="updateBtn">Päivitä</string>
     <string name="warnings_switch_left">Vaasa/Pohjanmaa</string>
     <string name="warnings_switch_right">Koko maa</string>
+    <string name="fragment4_title"><![CDATA[Asetukset & info]]></string>
+    <string name="notificationSwitch_left">Ilmoitukset pois</string>
+    <string name="notificationSwitch_right">Ilmoitukset päällä</string>
 </resources>

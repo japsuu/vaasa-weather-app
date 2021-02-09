@@ -1,6 +1,8 @@
 package com.japsu.vaasaweather;
 
+import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -21,14 +23,17 @@ import androidx.core.app.NotificationCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.SystemClock;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.japsu.vaasaweather.ui.main.PlaceholderFragment;
 import com.japsu.vaasaweather.ui.main.SectionsPagerAdapter;
 
 import org.w3c.dom.Document;
@@ -39,6 +44,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
 {
+    static AlarmManager alarmManager = null;
+    static PendingIntent notifyPendingIntent = null;
+    static Intent notifyIntent = null;
+    static Context context;
+
+    private static NotificationManager mNotificationManager;
+    public static final int NOTIFICATION_ID = 0;
+    private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -51,6 +64,9 @@ public class MainActivity extends AppCompatActivity
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
+        //get the context
+        MainActivity.context = getApplicationContext();
 
         //setting up notification stuff
         mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -66,16 +82,6 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(data);
 
-            /**
-             * TESTING PURPOSES ONLY
-             */
-            deliverNotification(MainActivity.this);
-            //Set the toast message for the "on" case
-            Toast.makeText(MainActivity.this, "Alarm On!", Toast.LENGTH_LONG).show();
-            /**
-             * TESTING PURPOSES ONLY
-             */
-
             try
             {
                 startActivity(Intent.createChooser(intent, "Send feedback"));
@@ -88,16 +94,38 @@ public class MainActivity extends AppCompatActivity
 
         //Notification stuff here too
         createNotificationChannel();
-        Intent notifyIntent = new Intent(this, AlarmReceiver.class);
-        PendingIntent notifyPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notifyIntent = new Intent(this, AlarmReceiver.class);
+        notifyPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
     }
 
-    //TODO: Notifications
-    private NotificationManager mNotificationManager;
-    private static final int NOTIFICATION_ID = 0;
-    private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
+    static void onCheckedChanged(boolean checked)
+    {
+        long repeatInterval = AlarmManager.INTERVAL_FIFTEEN_MINUTES / 15;
+        long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
+
+        if(alarmManager != null)
+        {
+            if(checked)
+            {
+                Log.d("NOTIFICATIONS", "Notifications are now turned on!");
+                Toast toast = Toast.makeText(context, "Notifications are now turned on!", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.TOP, 0, 60);
+                toast.show();
+                alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, notifyPendingIntent);
+            }
+            else
+            {
+                mNotificationManager.cancelAll();
+                Log.d("NOTIFICATIONS", "Notifications are now turned off!");
+                Toast toast = Toast.makeText(context, "Notifications are now turned off!", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.TOP, 0, 60);
+                toast.show();
+                alarmManager.cancel(notifyPendingIntent);
+            }
+        }
+    }
 
     /**
      * Creates a Notification channel, for OREO and higher.
@@ -113,12 +141,12 @@ public class MainActivity extends AppCompatActivity
         {
 
             // Create the NotificationChannel with all the parameters.
-            NotificationChannel notificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID,"Stand up notification", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel notificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID,"Freezing notification", NotificationManager.IMPORTANCE_HIGH);
 
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.RED);
             notificationChannel.enableVibration(true);
-            notificationChannel.setDescription("Notifies every 15 minutes to stand up and walk");
+            notificationChannel.setDescription("Notifies every day if it's been freezing outside");
             mNotificationManager.createNotificationChannel(notificationChannel);
         }
     }

@@ -30,8 +30,8 @@ public class AlarmReceiver extends BroadcastReceiver
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("Stand Up Alert")
-                .setContentText("You should stand up and walk around now!")
+                .setContentTitle("Jäätämisvaroitus")
+                .setContentText("Yön aikana on ollut pakkasta, aja varoen!")
                 .setContentIntent(contentPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
