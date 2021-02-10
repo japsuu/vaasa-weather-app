@@ -12,7 +12,7 @@
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
         android:text="@string/fragment1_title"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         android:textSize="30sp"
         android:textStyle="bold">
     </TextView>
@@ -45,9 +45,10 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal"
+        android:background="@drawable/linear_custom_border"
         android:padding="20dp"
         android:text="Haetaan dataa..."
-        android:textColor="#424242"
+        android:textColor="?attr/colorOnBackground"
         android:maxLines="200"
         android:scrollbars="vertical">
     </TextView>

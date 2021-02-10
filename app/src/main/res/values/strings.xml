@@ -2,15 +2,15 @@
     <string name="app_name">Vaasa Weather</string>
     <string name="tab_text_1">Varoitukset</string>
     <string name="tab_text_2">Lämpötila</string>
-    <string name="tab_text_3">Meren korkeus</string>
+    <string name="tab_text_3">Meren data</string>
     <string name="tab_text_4"><![CDATA[Asetukset & info]]></string>
     <string name="fragment1_title">Aktiiviset varoitukset:</string>
-    <string name="fragment2_title">Lämpötila:</string>
-    <string name="fragment3_title">Merenpinnan korkeus:</string>
+    <string name="fragment2_title">Lämpödata:</string>
+    <string name="fragment3_title">Meridata:</string>
+    <string name="fragment4_title"><![CDATA[Asetukset & info:]]></string>
     <string name="updateBtn">Päivitä</string>
     <string name="warnings_switch_left">Vaasa/Pohjanmaa</string>
     <string name="warnings_switch_right">Koko maa</string>
-    <string name="fragment4_title"><![CDATA[Asetukset & info]]></string>
     <string name="notificationSwitch_left">Ilmoitukset pois</string>
     <string name="notificationSwitch_right">Ilmoitukset päällä</string>
     <string name="Notification_info">Sovellus voi halutessasi ilmoittaa sinulle joka päivä aamuviideltä ennen töihin lähtöä, mikäli yöllä on ollut pakkasta ja tiet voivat olla jäässä. Voit kytkeä ominaisuuden päälle/pois alta.</string>
@@ -25,4 +25,11 @@
     <string name="info_faq_2_answer">-Ilmatieteenlaitoksen avoimesta datasta, jota kuka vain sovelluskehittäjä saa käyttää!</string>
     <string name="info_faq_3">Miten voin raportoida mahdollisesta bugista tai virheestä?</string>
     <string name="info_faq_3_answer">-Paina oikeassa alanurkassa olevaa kirjeenkuvaa, tämä avaa palautelomakkeen!</string>
+    <string name="nightmodeSwitch_left">Yötila pois</string>
+    <string name="nightmodeSwitch_right">Yötila päällä</string>
+    <string name="fragment2_temp_title"><u><b>Lämpötila</b></u></string>
+    <string name="fragment2_temp_current">Tämänhetkinen:</string>
+    <string name="fragment2_temp_highest">Päivän korkein:</string>
+    <string name="fragment2_temp_lowest">Päivän matalin:</string>
+    <string name="fragment3_sealevel_title"><u><b>Veden korkeus</b></u></string>
 </resources>

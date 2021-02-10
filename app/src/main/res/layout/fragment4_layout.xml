@@ -12,7 +12,7 @@
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
         android:text="@string/fragment4_title"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         android:textSize="30sp"
         android:textStyle="bold">
     </TextView>
@@ -49,13 +49,38 @@
             android:padding="10dp">
         </TextView>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nightmodeSwitch_left"
+            android:padding="10dp">
+        </TextView>
+        <Switch
+            android:id="@+id/nightmodeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </Switch>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nightmodeSwitch_right"
+            android:padding="10dp">
+        </TextView>
+    </LinearLayout>
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/linear_custom_border">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

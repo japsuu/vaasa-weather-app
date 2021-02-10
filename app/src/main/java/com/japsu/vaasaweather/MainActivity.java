@@ -6,10 +6,13 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.UiModeManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -20,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.NotificationCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +36,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.japsu.vaasaweather.ui.main.PlaceholderFragment;
@@ -51,6 +56,7 @@ public class MainActivity extends AppCompatActivity
     static Context context;
 
     private static NotificationManager mNotificationManager;
+    private static UiModeManager uiModeManager;
     public static final int NOTIFICATION_ID = 0;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
 
@@ -72,6 +78,9 @@ public class MainActivity extends AppCompatActivity
         //setting up notification stuff
         mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
+        //setting up night mode switch stuff
+        uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
+
         //setting up all the fab and feedback stuff
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view ->
@@ -84,11 +93,22 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(data);*/
 
+            String version = null;
+            int versionCode = 0;
+
+            try {
+                PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+                version = pInfo.versionName;
+                versionCode = pInfo.versionCode;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/html");
             intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"japsu.honkasalo@gmail.com"});
             intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Vaasa Weather app!");
-            intent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("<small>App version: " + Constants.version + "<br/>Device Manufacturer: " + Build.MANUFACTURER + "<br/>Device Model: " + Build.MODEL + "<br/>Android Version: " + Build.VERSION.RELEASE + "</small><br/>Leave the info above untouched, thank you! :)<br/><br/><b>Please write your feedback here:</b>"));
+            intent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("<small>App version: " + version + versionCode + "<br/>Device Manufacturer: " + Build.MANUFACTURER + "<br/>Device Model: " + Build.MODEL + "<br/>Android Version: " + Build.VERSION.RELEASE + "</small><br/>Leave the info above untouched, thank you! :)<br/><br/><b>Please write your feedback here:</b>"));
 
             try
             {
@@ -106,9 +126,22 @@ public class MainActivity extends AppCompatActivity
         notifyPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        SharedPreferences prefs = getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        boolean nightmodeOn = prefs.getBoolean("nightmodeOn", false);
+        if(nightmodeOn)
+        {
+            Log.d("NIGHTMODE", "Nightmode is now turned on!");
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else
+        {
+            Log.d("NIGHTMODE", "Nightmode is now turned off!");
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 
-    static void onCheckedChanged(boolean checked)
+    static void onNotifCheckedChanged(boolean checked)
     {
         SharedPreferences prefs = context.getSharedPreferences("Settings", MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
@@ -151,6 +184,25 @@ public class MainActivity extends AppCompatActivity
                 //toast.show();
                 alarmManager.cancel(notifyPendingIntent);
             }
+        }
+    }
+
+    static void onNightCheckedChanged(boolean checked)
+    {
+        SharedPreferences prefs = context.getSharedPreferences("Settings", MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("nightmodeOn", checked);
+        edit.apply();
+
+        if(checked)
+        {
+            Log.d("NIGHTMODE", "Nightmode is now turned on!");
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else
+        {
+            Log.d("NIGHTMODE", "Nightmode is now turned off!");
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 

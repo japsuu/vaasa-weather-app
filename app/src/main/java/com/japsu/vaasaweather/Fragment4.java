@@ -16,7 +16,8 @@ import androidx.fragment.app.Fragment;
 
 public class Fragment4 extends Fragment
 {
-    static Switch notificationSwitch = null;
+    private static Switch notificationSwitch = null;
+    private static Switch nightmodeSwitch = null;
 
     @Nullable
     @Override
@@ -24,20 +25,28 @@ public class Fragment4 extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment4_layout, container, false);
         notificationSwitch = (Switch) view.findViewById(R.id.notificationSwitch);
+        nightmodeSwitch = (Switch) view.findViewById(R.id.nightmodeSwitch);
         if(notificationSwitch != null)
         {
             notificationSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
             {
-                MainActivity.onCheckedChanged(isChecked);
+                MainActivity.onNotifCheckedChanged(isChecked);
             });
         }
-        //boolean alarmOn = (PendingIntent.getBroadcast(MainActivity.context, MainActivity.NOTIFICATION_ID, MainActivity.notifyIntent, PendingIntent.FLAG_NO_CREATE) != null);
+        if(nightmodeSwitch != null)
+        {
+            nightmodeSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+            {
+                MainActivity.onNightCheckedChanged(isChecked);
+            });
+        }
+
         SharedPreferences prefs = this.getContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        boolean alarmOn = prefs.getBoolean("notificationsOn", true);
+        boolean alarmOn = prefs.getBoolean("notificationsOn", false);
         notificationSwitch.setChecked(alarmOn);
+        boolean nightmodeOn = prefs.getBoolean("nightmodeOn", false);
+        nightmodeSwitch.setChecked(nightmodeOn);
 
         return view;
     }
 }
-
-//TODO: Figure out why the notification toggle stays on on restart

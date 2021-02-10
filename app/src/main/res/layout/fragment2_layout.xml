@@ -1,73 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical">
-
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
         android:text="@string/fragment2_title"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         android:textSize="30sp"
         android:textStyle="bold">
     </TextView>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_weight="1">
-        <Button
-            android:id="@+id/tempUpdateBtn"
+        android:background="@drawable/linear_custom_border"
+        android:padding="10dp">
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/updateBtn">
-        </Button>
-        <TextView
-            android:id="@+id/curTemperature"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/fragment2_temp_title"
+                android:textSize="25sp"
+                android:textColor="?attr/colorOnBackground"
+                android:gravity="center"
+                android:paddingRight="20dp"
+                android:paddingEnd="20dp"
+                tools:ignore="RtlSymmetry">
+            </TextView>
+            <Button
+                android:id="@+id/tempUpdateBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/updateBtn">
+            </Button>
+            <ProgressBar
+                android:id="@+id/tempUpdateProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="invisible">
+            </ProgressBar>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Tämänhetkinen:"
-            android:textSize="30sp"
-            android:textColor="#118316"
-            android:gravity="center">
-        </TextView>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="start"
-        android:layout_weight="1">
-        <TextView
-            android:id="@+id/maxTemperature"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/curTemperature"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/fragment2_temp_current"
+                android:textSize="20sp"
+                android:textColor="?attr/colorOnBackground"
+                android:gravity="left"
+                tools:ignore="RtlHardcoded">
+            </TextView>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Päivän korkein:"
-            android:textSize="30sp"
-            android:textColor="#D60000"
-            android:gravity="center">
-        </TextView>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="start"
-        android:layout_weight="1">
-        <TextView
-            android:id="@+id/minTemperature"
+            android:orientation="vertical"
+            android:gravity="start"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/maxTemperature"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/fragment2_temp_highest"
+                android:textSize="17sp"
+                android:textColor="?attr/colorOnBackground"
+                android:gravity="left"
+                tools:ignore="RtlHardcoded">
+            </TextView>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Päivän matalin:"
-            android:textSize="30sp"
-            android:textColor="#0037C5"
-            android:gravity="center">
-        </TextView>
+            android:orientation="vertical"
+            android:gravity="start"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/minTemperature"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/fragment2_temp_lowest"
+                android:textSize="17sp"
+                android:textColor="?attr/colorOnBackground"
+                android:gravity="left"
+                tools:ignore="RtlHardcoded">
+            </TextView>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
