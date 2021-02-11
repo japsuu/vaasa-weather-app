@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity
     static Intent notifyIntent = null;
     static Context context;
 
+    private static boolean isFirstStart = true;
     private static NotificationManager mNotificationManager;
     private static UiModeManager uiModeManager;
     public static final int NOTIFICATION_ID = 0;
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(5);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
@@ -127,18 +129,30 @@ public class MainActivity extends AppCompatActivity
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
+        //nightmode stuff
         SharedPreferences prefs = getSharedPreferences("Settings", Context.MODE_PRIVATE);
         boolean nightmodeOn = prefs.getBoolean("nightmodeOn", false);
         if(nightmodeOn)
         {
-            Log.d("NIGHTMODE", "Nightmode is now turned on!");
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         else
         {
-            Log.d("NIGHTMODE", "Nightmode is now turned off!");
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+
+        //Get the data on the first start
+        if(isFirstStart)
+        {
+            FirstStart();
+        }
+    }
+
+    private void FirstStart()
+    {
+        isFirstStart = false;
+        Fragment2.GetTemp();
+        Fragment3.GetLevel();
     }
 
     static void onNotifCheckedChanged(boolean checked)
@@ -168,7 +182,7 @@ public class MainActivity extends AppCompatActivity
         {
             if(checked)
             {
-                Log.d("NOTIFICATIONS", "Notifications are now turned on!");
+                //Log.d("NOTIFICATIONS", "Notifications are now turned on!");
                 //Toast toast = Toast.makeText(context, "Notifications are now turned on!", Toast.LENGTH_LONG);
                 //toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.TOP, 0, 60);
                 //toast.show();
@@ -178,7 +192,7 @@ public class MainActivity extends AppCompatActivity
             else
             {
                 mNotificationManager.cancelAll();
-                Log.d("NOTIFICATIONS", "Notifications are now turned off!");
+                //Log.d("NOTIFICATIONS", "Notifications are now turned off!");
                 //Toast toast = Toast.makeText(context, "Notifications are now turned off!", Toast.LENGTH_LONG);
                 //toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.TOP, 0, 60);
                 //toast.show();
@@ -196,12 +210,12 @@ public class MainActivity extends AppCompatActivity
 
         if(checked)
         {
-            Log.d("NIGHTMODE", "Nightmode is now turned on!");
+            //Log.d("NIGHTMODE", "Nightmode is now turned on!");
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         else
         {
-            Log.d("NIGHTMODE", "Nightmode is now turned off!");
+            //Log.d("NIGHTMODE", "Nightmode is now turned off!");
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }

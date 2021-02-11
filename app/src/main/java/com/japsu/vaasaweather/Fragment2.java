@@ -55,11 +55,10 @@ public class Fragment2 extends Fragment
         updateProgress = view.findViewById(R.id.tempUpdateProgress);
         updateBtn.setOnClickListener(v -> GetTemp());
 
-        GetTemp();
         return view;
     }
 
-    private static void GetTemp()   //TODO: Also make another weather widget for the full week weather
+    public static void GetTemp()   //TODO: Also make another weather widget for the full week weather
     {
         GetTemperature(false);
         if(updateProgress != null)
@@ -103,8 +102,8 @@ public class Fragment2 extends Fragment
         //check if the text object exists, to circumvent any null reference exceptions
         if(curTempView != null && maxTempView != null && minTempView != null)
         {
-            Log.d("TEMP", "Lämpötila data vastaanotettu!");
-            new Handler().postDelayed(() -> HideProgress(), 100);
+            Log.d("TEMP", "Temperature data received");
+            new Handler().postDelayed(Fragment2::HideProgress, 100);
 
             //check if the data contains anything
             if(result.length != 0)
@@ -157,7 +156,7 @@ public class Fragment2 extends Fragment
         try
         {
             //start a new async event for downloading the document
-            new DownloadTemperature().execute(new TaskParams(new URL("https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::observations::weather::multipointcoverage&place=vaasa&starttime=STARTTIMEHERET00:00:00Z&endtime=CURRENTDATEHERETCURRENTTIMEHEREZ&Parameters=temperature"), isBackgroundTask));
+            new DownloadTemperature().execute(new TaskParams(new URL("https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::observations::weather::multipointcoverage&place=vaasa&starttime=STARTTIMEHERET00:00:00Z&Parameters=temperature"), isBackgroundTask));
         }
         catch (MalformedURLException e)
         {
@@ -179,13 +178,12 @@ class DownloadTemperature extends AsyncTask<TaskParams, Integer, Double[]>
         //get the current dates and times
         Date date = new Date();
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 
         //try to download the document
         try
         {
             db = dbf.newDocumentBuilder();
-            doc = db.parse(new URL(params[0].url.toString().replace("STARTTIMEHERE", dateFormatter.format(date)).replace("CURRENTDATEHERETCURRENTTIMEHERE", timeFormatter.format(date).replace("_", "T"))).openStream());
+            doc = db.parse(new URL(params[0].url.toString().replace("STARTTIMEHERE", dateFormatter.format(date))).openStream());
         }
         catch (Exception e)
         {

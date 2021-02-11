@@ -44,7 +44,6 @@ public class Fragment1 extends Fragment
         GetWarnings(warningSwitch.isChecked());
         warningSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
         {
-            Log.d("TESTING", "Switch state changed");
             GetWarnings(isChecked);
         });
 
@@ -64,7 +63,7 @@ public class Fragment1 extends Fragment
         String warnings = "";
         if(warningsView != null)
         {
-            Log.d("WARN", "Varoitusten data vastaanotettu:\n");
+            Log.d("WARN", "Warnings data received");
             if(result.size() != 1)
             {
                 for (int i = 0; i < result.size(); i++)
