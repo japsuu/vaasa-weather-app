@@ -1,6 +1,7 @@
 package com.japsu.vaasaweather;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,17 +10,22 @@ import android.os.Handler;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MotionEventCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -60,11 +66,21 @@ public class Fragment3 extends Fragment
     static TextView curLevelView = null;
     static TextView maxLevelView = null;
     static TextView minLevelView = null;
+    static TextView curTempView = null;
+    static TextView maxTempView = null;
+    static TextView minTempView = null;
     static Button updateBtn = null;
     static ImageView infoBtn = null;
     static ProgressBar updateProgress = null;
-    static GraphView graph = null;
+    static GraphView graphSeal = null;
+    static GraphView graphSeat = null;
     static Context context = null;
+    static CustomScrollView seaScrollView = null;
+
+    static Double maxSealValue = -9999.9999;
+    static Double minSealValue = 9999.9999;
+    static Double maxTempValue = -9999.9999;
+    static Double minTempValue = 9999.9999;
 
     @Nullable
     @Override
@@ -76,30 +92,87 @@ public class Fragment3 extends Fragment
         curLevelView = (TextView) view.findViewById(R.id.curSealevel);
         maxLevelView = (TextView) view.findViewById(R.id.maxSealevel);
         minLevelView = (TextView) view.findViewById(R.id.minSealevel);
-        graph = (GraphView) view.findViewById(R.id.sealGraph);
+        curTempView = (TextView) view.findViewById(R.id.curSeatemp);
+        maxTempView = (TextView) view.findViewById(R.id.maxSeatemp);
+        minTempView = (TextView) view.findViewById(R.id.minSeatemp);
+        graphSeal = (GraphView) view.findViewById(R.id.sealGraph);
+        graphSeat = (GraphView) view.findViewById(R.id.seatGraph);
+        seaScrollView = (CustomScrollView) view.findViewById(R.id.seaScrollView);
         updateBtn = view.findViewById(R.id.sealUpdateBtn);
         infoBtn = view.findViewById(R.id.sealInfoBtn);
         updateProgress = view.findViewById(R.id.sealUpdateProgress);
         updateBtn.setOnClickListener(v -> GetLevel());
         infoBtn.setOnClickListener(v -> ShowInfo());
+        graphSeal.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                int action = MotionEventCompat.getActionMasked(event);
+                switch (action)
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        MainActivity.viewPager.setEnableSwipe(false);
+                        seaScrollView.setEnableScrolling(false);
+                        return false;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        MainActivity.viewPager.setEnableSwipe(true);
+                        seaScrollView.setEnableScrolling(true);
+                        return false;
+                    default:
+                        return false;
+                }
+            }
+        });
+        graphSeat.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                int action = MotionEventCompat.getActionMasked(event); // FIXME: 14.2.2021
+                switch (action)
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        MainActivity.viewPager.setEnableSwipe(false);
+                        seaScrollView.setEnableScrolling(false);
+                        return false;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        MainActivity.viewPager.setEnableSwipe(true);
+                        seaScrollView.setEnableScrolling(true);
+                        return false;
+                    default:
+                        return false;
+                }
+            }
+        });
 
         return  view;
     }
 
     private static void BuildGraph(SealevelData[] values)
     {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(R.attr.colorOnBackground, typedValue, true);
+        @ColorInt int colorOnBackground = typedValue.data;
+
         Double[] levels = new Double[values.length];
         Double[] temps = new Double[values.length];
         String[] dates = new String[values.length];
+        String[] times = new String[values.length];
 
         for (int i = 0; i < values.length; i++)
         {
             levels[i] = values[i].level;
             temps[i] = values[i].temp;
             dates[i] = values[i].dateUnformatted;
+            times[i] = values[i].time;
         }
 
-        graph.removeAllSeries();
+        graphSeal.removeAllSeries();
+        graphSeat.removeAllSeries();
 
         DataPoint[] levelPoints = new DataPoint[values.length];
         DataPoint[] tempPoints = new DataPoint[temps.length];
@@ -111,93 +184,130 @@ public class Fragment3 extends Fragment
         }
 
         LineGraphSeries<DataPoint> levelSeries = new LineGraphSeries<>(levelPoints);
-        BarGraphSeries<DataPoint> tempSeries = new BarGraphSeries<>(tempPoints);
+        LineGraphSeries<DataPoint> tempSeries = new LineGraphSeries<>(tempPoints);
 
-        levelSeries.setColor(Color.BLUE);
+        levelSeries.setColor(colorOnBackground);
         tempSeries.setColor(Color.RED);
 
         levelSeries.setDrawDataPoints(true);
-        levelSeries.setDataPointsRadius(6);
+        levelSeries.setDataPointsRadius(4);
+        tempSeries.setDrawDataPoints(true);
+        tempSeries.setDataPointsRadius(4);
 
         levelSeries.setTitle("Korkeus");
         tempSeries.setTitle("Lämpötila");
 
-        graph.setTitle("Päivitetty: " + values[values.length - 1].time);
+        graphSeal.setTitle("Päivitetty: " + values[values.length - 1].time);
+        graphSeat.setTitle("Päivitetty: " + values[values.length - 1].time);
 
-        graph.getLegendRenderer().setVisible(true);
-        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        graph.getGridLabelRenderer().setHorizontalAxisTitle("Mittauspäivä");
-        graph.getGridLabelRenderer().setHorizontalLabelsAngle(25);
-        graph.getGridLabelRenderer().setNumHorizontalLabels(5);
-        graph.getGridLabelRenderer().setNumVerticalLabels(7);
+        graphSeal.getLegendRenderer().setVisible(true);
+        graphSeal.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graphSeat.getLegendRenderer().setVisible(true);
+        graphSeat.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
-        levelSeries.setOnDataPointTapListener(new OnDataPointTapListener() {
-            @Override
-            public void onTap(Series series, DataPointInterface dataPoint)
+        //set the labels colour so that we can see them no matter the background color
+        graphSeal.getGridLabelRenderer().setVerticalLabelsColor(colorOnBackground); // FIXME: 14.2.2021
+
+        //set manual bounds, and make the graph scalable, also make sure that the labels are tilted a bit to prevent overlapping
+        graphSeal.getViewport().setXAxisBoundsManual(true);
+        graphSeal.getViewport().setYAxisBoundsManual(true);
+        graphSeal.getViewport().setMaxX(values.length);
+        graphSeal.getViewport().setMinX(0);
+        graphSeal.getViewport().setMaxY(maxSealValue + 50);
+        graphSeal.getViewport().setMinY(minSealValue - 50);
+        graphSeal.getViewport().setScalable(true);
+        graphSeal.getViewport().scrollToEnd();
+        graphSeal.getGridLabelRenderer().setHorizontalLabelsAngle(25);
+
+        graphSeat.getViewport().setXAxisBoundsManual(true);
+        graphSeat.getViewport().setYAxisBoundsManual(true);
+        graphSeat.getViewport().setMaxX(values.length);
+        graphSeat.getViewport().setMinX(0);
+        graphSeat.getViewport().setMaxY(maxTempValue + 2);
+        graphSeat.getViewport().setMinY(minTempValue - 2);
+        graphSeat.getViewport().setScalable(true);
+        graphSeat.getViewport().scrollToEnd();
+        graphSeat.getGridLabelRenderer().setHorizontalLabelsAngle(25);
+
+        levelSeries.setOnDataPointTapListener((series, dataPoint) ->
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            SimpleDateFormat output = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy");
+            Date d = null;
+
+            try
             {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-                SimpleDateFormat output = new SimpleDateFormat("dd-MM-yyyy");
-                Date d = null;
-
-                try
-                {
-                    d = sdf.parse(dates[(int)dataPoint.getX()]);
-                }
-                catch (ParseException e)
-                {
-                    e.printStackTrace();
-                }
-
-                String formattedTime = output.format(d);
-
-                Toast.makeText(context, "" + dataPoint.getY() + " aikana " + formattedTime, Toast.LENGTH_SHORT).show();
+                d = sdf.parse(dates[(int)dataPoint.getX()]);
             }
+            catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
+
+            String formattedTime = output.format(d);
+
+            Toast.makeText(context, "" + dataPoint.getY() + " kello " + formattedTime, Toast.LENGTH_SHORT).show();
         });
 
-        //TODO: set manual bounds and enable scrolling
+        tempSeries.setOnDataPointTapListener((series, dataPoint) ->
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            SimpleDateFormat output = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy");
+            Date d = null;
 
-        // custom label formatter to show labels as "mm"
-        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter()
+            try
+            {
+                d = sdf.parse(dates[(int)dataPoint.getX()]);
+            }
+            catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
+
+            String formattedTime = output.format(d);
+
+            Toast.makeText(context, "" + dataPoint.getY() + " kello " + formattedTime, Toast.LENGTH_SHORT).show();
+        });
+
+        graphSeal.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter()
         {
             @Override
             public String formatLabel(double value, boolean isValueX)
             {
                 if (isValueX)
                 {
-                    Integer val = (int)value;
-                    String date = dates[val];
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-                    SimpleDateFormat output = new SimpleDateFormat("dd-MM-yyyy");
-                    Date d = null;
-
-                    try
-                    {
-                        d = sdf.parse(date);
-                    }
-                    catch (ParseException e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                    String formattedTime = output.format(d);
-
-                    return formattedTime;
+                    return times[(int)value];
                 }
                 else
                 {
-                    return super.formatLabel(value, isValueX) + "mm";
+                    return super.formatLabel(value, isValueX) + "cm";
                 }
             }
         });
 
-        graph.addSeries(levelSeries);
-        graph.addSeries(tempSeries);
+        graphSeat.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter()
+        {
+            @Override
+            public String formatLabel(double value, boolean isValueX)
+            {
+                if (isValueX)
+                {
+                    return times[(int)value];
+                }
+                else
+                {
+                    return super.formatLabel(value, isValueX) + "\u2103";
+                }
+            }
+        });
+
+        graphSeat.addSeries(tempSeries);
+        graphSeal.addSeries(levelSeries);
     }
 
     private void ShowInfo()
     {
-        Toast.makeText(this.getActivity(), "Ilmatieteenlaitos päivittää dataa vain noin kahden tunnin välein!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getActivity(), "Ilmatieteenlaitos päivittää dataa vain muutamien tuntien välein!", Toast.LENGTH_LONG).show();
     }
 
     public static void GetLevel()
@@ -238,63 +348,94 @@ public class Fragment3 extends Fragment
     // FIXME: 10.2.2021
     public static void UpdateTextfields(SealevelData[] result)
     {
-        String current = "Tämänhetkinen: ";
-        String highest = "Viikon korkein: ";
-        String lowest = "Viikon matalin: ";
+        String currentSeal = "Tämänhetkinen: ";
+        String highestSeal = "Viiden päivän korkein: ";
+        String lowestSeal = "Viiden päivän matalin: ";
+        String currentTemp = "Tämänhetkinen: ";
+        String highestTemp = "Viiden päivän korkein: ";
+        String lowestTemp = "Viiden päivän matalin: ";
 
         //check if the text object exists, to circumvent any null reference exceptions
         if(curLevelView != null && maxLevelView != null && minLevelView != null)
         {
-            BuildGraph(result);
-
             Log.d("SEAL", "Marine data received! Data sample size: " + result.length);
             new Handler().postDelayed(Fragment3::HideProgress, 100);
 
             Double[] levels = new Double[result.length];
+            Double[] temps = new Double[result.length];
+
             for (int i = 0; i < result.length; i++)
             {
                 levels[i] = result[i].level;
+                temps[i] = result[i].temp;
             }
 
             //check if the data contains anything
             if(levels.length != 0)
             {
                 //get the highest and lowest values in the array
-                Double maxValue = -9999.9999;
-                Double minValue = 9999.9999;
+
                 for(int i = 0; i < levels.length; i++)
                 {
-                    if(levels[i] > maxValue)
+                    if(levels[i] > maxSealValue)
                     {
-                        maxValue = levels[i];
+                        maxSealValue = levels[i];
                     }
-                    if(levels[i] < minValue)
+                    if(levels[i] < minSealValue)
                     {
-                        minValue = levels[i];
+                        minSealValue = levels[i];
                     }
                 }
 
-                current += levels[levels.length - 1] + "mm";
-                highest += maxValue.toString() + "mm";
-                lowest += minValue.toString() + "mm";
+                for(int i = 0; i < temps.length; i++)
+                {
+                    if(temps[i] > maxTempValue)
+                    {
+                        maxTempValue = temps[i];
+                    }
+                    if(temps[i] < minTempValue)
+                    {
+                        minTempValue = temps[i];
+                    }
+                }
+
+                currentSeal += levels[levels.length - 1] + "cm";
+                highestSeal += maxSealValue.toString() + "cm";
+                lowestSeal += minSealValue.toString() + "cm";
+
+                currentTemp += temps[temps.length - 1] + "\u2103";
+                highestTemp += maxTempValue.toString() + "\u2103";
+                lowestTemp += minTempValue.toString() + "\u2103";
             }
             else
             {
-                current += "Ei Korkeusdataa... :(";
-                highest += "Ei Korkeusdataa... :(";
-                lowest += "Ei Korkeusdataa... :(";
+                currentSeal += "Ei Korkeusdataa... :(";
+                highestSeal += "Ei Korkeusdataa... :(";
+                lowestSeal += "Ei Korkeusdataa... :(";
+                currentTemp += "Ei Lämpötiladataa... :(";
+                highestTemp += "Ei Lämpötiladataa... :(";
+                lowestTemp += "Ei Lämpötiladataa... :(";
             }
 
             //convert the strings to Spanned for HTML support, and set the textviews' texts:
             //current
-            Spanned spannedCurrent = Html.fromHtml(current);
-            curLevelView.setText(spannedCurrent);
+            Spanned spannedCurrentSeal = Html.fromHtml(currentSeal);
+            curLevelView.setText(spannedCurrentSeal);
+            Spanned spannedCurrentTemp = Html.fromHtml(currentTemp);
+            curTempView.setText(spannedCurrentTemp);
             //max
-            Spanned spannedMax = Html.fromHtml(highest);
-            maxLevelView.setText(spannedMax);
+            Spanned spannedMaxSeal = Html.fromHtml(highestSeal);
+            maxLevelView.setText(spannedMaxSeal);
+            Spanned spannedMaxTemp = Html.fromHtml(highestTemp);
+            maxTempView.setText(spannedMaxTemp);
             //min
-            Spanned spannedMin = Html.fromHtml(lowest);
-            minLevelView.setText(spannedMin);
+            Spanned spannedMinSeal = Html.fromHtml(lowestSeal);
+            minLevelView.setText(spannedMinSeal);
+            Spanned spannedMinTemp = Html.fromHtml(lowestTemp);
+            minTempView.setText(spannedMinTemp);
+
+            //we build the graph of the result
+            BuildGraph(result);
         }
     }
 
@@ -325,11 +466,6 @@ class SealevelData
         this.level = level;
         this.temp = temp;
         this.dateUnformatted = dateUnformatted;
-    }
-
-    public String getAsString()
-    {
-        return time + "- Level: " + level.toString() + " Temp: " + temp.toString();
     }
 }
 
@@ -387,7 +523,7 @@ class DownloadSealevel extends AsyncTask<URL, Integer, SealevelData[]>
                             {
                                 String unformattedTime = levelNodes.item(i).getChildNodes().item(j).getChildNodes().item(k).getTextContent();
                                 String time = unformattedTime.substring(unformattedTime.indexOf("T") + 1).replace("Z", "");
-                                Double level = Double.parseDouble(levelNodes.item(i).getChildNodes().item(j).getChildNodes().item(k + 2).getTextContent());
+                                Double level = Double.parseDouble(levelNodes.item(i).getChildNodes().item(j).getChildNodes().item(k + 2).getTextContent()) / 10;
                                 Double temp = Double.parseDouble(tempNodes.item(i).getChildNodes().item(j).getChildNodes().item(k + 2).getTextContent());
                                 SealevelData data = new SealevelData(time, unformattedTime, level, temp);
                                 result[(i - 1) / 2] = data;

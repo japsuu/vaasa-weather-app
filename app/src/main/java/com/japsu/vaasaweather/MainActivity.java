@@ -1,8 +1,6 @@
 package com.japsu.vaasaweather;
 
-import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,7 +12,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -24,29 +21,13 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.NotificationCompat;
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.SystemClock;
 import android.text.Html;
-import android.text.Spanned;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.widget.Toast;
 
-import com.japsu.vaasaweather.ui.main.PlaceholderFragment;
 import com.japsu.vaasaweather.ui.main.SectionsPagerAdapter;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
 import java.util.Calendar;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -54,6 +35,7 @@ public class MainActivity extends AppCompatActivity
     static PendingIntent notifyPendingIntent = null;
     static Intent notifyIntent = null;
     static Context context;
+    public static CustomViewPager viewPager = null;
 
     private static boolean isFirstStart = true;
     private static NotificationManager mNotificationManager;
@@ -68,7 +50,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
+        //ViewPager viewPager = findViewById(R.id.view_pager);
+        viewPager = (CustomViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(5);
         TabLayout tabs = findViewById(R.id.tabs);

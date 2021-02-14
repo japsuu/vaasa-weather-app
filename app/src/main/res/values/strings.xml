@@ -32,4 +32,5 @@
     <string name="fragment2_temp_highest">Päivän korkein:</string>
     <string name="fragment2_temp_lowest">Päivän matalin:</string>
     <string name="fragment3_sealevel_title"><u><b>Veden korkeus</b></u></string>
+    <string name="fragment3_seatemp_title"><u><b>Veden lämpötila</b></u></string>
 </resources>
