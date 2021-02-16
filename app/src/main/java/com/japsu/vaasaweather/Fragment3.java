@@ -153,6 +153,9 @@ public class Fragment3 extends Fragment
 
     private static void BuildGraph(SealevelData[] values)
     {
+        graphSeal.removeAllSeries();
+        graphSeat.removeAllSeries();
+
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(R.attr.colorOnBackground, typedValue, true);
@@ -171,9 +174,6 @@ public class Fragment3 extends Fragment
             times[i] = values[i].time;
         }
 
-        graphSeal.removeAllSeries();
-        graphSeat.removeAllSeries();
-
         DataPoint[] levelPoints = new DataPoint[values.length];
         DataPoint[] tempPoints = new DataPoint[temps.length];
 
@@ -186,49 +186,50 @@ public class Fragment3 extends Fragment
         LineGraphSeries<DataPoint> levelSeries = new LineGraphSeries<>(levelPoints);
         LineGraphSeries<DataPoint> tempSeries = new LineGraphSeries<>(tempPoints);
 
-        levelSeries.setColor(colorOnBackground);
-        tempSeries.setColor(Color.RED);
 
-        levelSeries.setDrawDataPoints(true);
-        levelSeries.setDataPointsRadius(4);
-        tempSeries.setDrawDataPoints(true);
-        tempSeries.setDataPointsRadius(4);
-
-        levelSeries.setTitle("Korkeus");
-        tempSeries.setTitle("Lämpötila");
-
-        graphSeal.setTitle("Päivitetty: " + values[values.length - 1].time);
-        graphSeat.setTitle("Päivitetty: " + values[values.length - 1].time);
-
-        graphSeal.getLegendRenderer().setVisible(true);
-        graphSeal.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        graphSeat.getLegendRenderer().setVisible(true);
-        graphSeat.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-
-        //set the labels colour so that we can see them no matter the background color
-        graphSeal.getGridLabelRenderer().setVerticalLabelsColor(colorOnBackground); // FIXME: 14.2.2021
-
-        //set manual bounds, and make the graph scalable, also make sure that the labels are tilted a bit to prevent overlapping
+        graphSeal.setTitle("Päivitetty: " + times[times.length - 1]);
         graphSeal.getViewport().setXAxisBoundsManual(true);
-        graphSeal.getViewport().setYAxisBoundsManual(true);
         graphSeal.getViewport().setMaxX(values.length);
         graphSeal.getViewport().setMinX(0);
-        graphSeal.getViewport().setMaxY(maxSealValue + 50);
-        graphSeal.getViewport().setMinY(minSealValue - 50);
+        graphSeal.getViewport().setYAxisBoundsManual(true);
+        graphSeal.getViewport().setMaxY(maxSealValue + 30);
+        graphSeal.getViewport().setMinY(maxSealValue - 30);
         graphSeal.getViewport().setScalable(true);
-        graphSeal.getViewport().scrollToEnd();
+        graphSeal.getLegendRenderer().setVisible(true);
+        graphSeal.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graphSeal.getGridLabelRenderer().setNumHorizontalLabels(5);
+        graphSeat.getGridLabelRenderer().setNumVerticalLabels(7);
         graphSeal.getGridLabelRenderer().setHorizontalLabelsAngle(25);
+        graphSeal.getGridLabelRenderer().setVerticalLabelsColor(colorOnBackground);
+        graphSeal.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter()
+        {
+            @Override
+            public String formatLabel(double value, boolean isValueX)
+            {
+                if (isValueX)
+                {
+                    if((int)value == times.length)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return times[(int)value];
+                    }
+                }
+                else
+                {
+                    // show temp for y values
+                    return super.formatLabel(value, isValueX) + "cm";
+                }
+            }
+        });
 
-        graphSeat.getViewport().setXAxisBoundsManual(true);
-        graphSeat.getViewport().setYAxisBoundsManual(true);
-        graphSeat.getViewport().setMaxX(values.length);
-        graphSeat.getViewport().setMinX(0);
-        graphSeat.getViewport().setMaxY(maxTempValue + 2);
-        graphSeat.getViewport().setMinY(minTempValue - 2);
-        graphSeat.getViewport().setScalable(true);
-        graphSeat.getViewport().scrollToEnd();
-        graphSeat.getGridLabelRenderer().setHorizontalLabelsAngle(25);
-
+        levelSeries.setTitle("Korkeus");
+        levelSeries.setColor(colorOnBackground);
+        levelSeries.setThickness(2);
+        levelSeries.setDrawDataPoints(true);
+        levelSeries.setDataPointsRadius(4);
         levelSeries.setOnDataPointTapListener((series, dataPoint) ->
         {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -249,6 +250,53 @@ public class Fragment3 extends Fragment
             Toast.makeText(context, "" + dataPoint.getY() + " kello " + formattedTime, Toast.LENGTH_SHORT).show();
         });
 
+
+        graphSeal.addSeries(levelSeries);
+
+
+        graphSeat.setTitle("Päivitetty: " + times[times.length - 1]);
+        graphSeat.getViewport().setXAxisBoundsManual(true);
+        graphSeat.getViewport().setMaxX(values.length);
+        graphSeat.getViewport().setMinX(0);
+        graphSeat.getViewport().setYAxisBoundsManual(true);
+        graphSeat.getViewport().setMaxY(maxTempValue + 3);
+        graphSeat.getViewport().setMinY(maxTempValue - 3);
+        graphSeat.getViewport().setScalable(true);
+        graphSeat.getLegendRenderer().setVisible(true);
+        graphSeat.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graphSeat.getGridLabelRenderer().setNumHorizontalLabels(5);
+        graphSeat.getGridLabelRenderer().setNumVerticalLabels(7);
+        graphSeat.getGridLabelRenderer().setHorizontalLabelsAngle(25);
+        graphSeat.getGridLabelRenderer().setVerticalLabelsColor(Color.RED);
+        graphSeat.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter()
+        {
+            @Override
+            public String formatLabel(double value, boolean isValueX)
+            {
+                if (isValueX)
+                {
+                    if((int)value == times.length)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return times[(int)value];
+                    }
+                }
+                else
+                {
+                    // show temp for y values
+                    return super.formatLabel(value, isValueX) + "\u2103";
+                }
+            }
+        });
+
+        tempSeries.setTitle("Lämpötila");
+        tempSeries.setColor(Color.RED);
+        tempSeries.setThickness(2);
+        tempSeries.setDrawDataPoints(true);
+        tempSeries.setDataPointsRadius(4);
         tempSeries.setOnDataPointTapListener((series, dataPoint) ->
         {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -269,6 +317,81 @@ public class Fragment3 extends Fragment
             Toast.makeText(context, "" + dataPoint.getY() + " kello " + formattedTime, Toast.LENGTH_SHORT).show();
         });
 
+
+        graphSeat.addSeries(tempSeries);
+
+
+        /*
+
+        levelSeries.setTitle("Korkeus");
+        levelSeries.setColor(colorOnBackground);
+        levelSeries.setDrawDataPoints(true);
+        levelSeries.setDataPointsRadius(4);
+        levelSeries.setOnDataPointTapListener((series, dataPoint) ->
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            SimpleDateFormat output = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy");
+            Date d = null;
+
+            try
+            {
+                d = sdf.parse(dates[(int)dataPoint.getX()]);
+            }
+            catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
+
+            String formattedTime = output.format(d);
+
+            Toast.makeText(context, "" + dataPoint.getY() + " kello " + formattedTime, Toast.LENGTH_SHORT).show();
+        });
+
+        tempSeries.setTitle("Lämpötila");
+        tempSeries.setColor(Color.RED);
+        tempSeries.setDrawDataPoints(true);
+        tempSeries.setDataPointsRadius(4);
+        tempSeries.setOnDataPointTapListener((series, dataPoint) ->
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            SimpleDateFormat output = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy");
+            Date d = null;
+
+            try
+            {
+                d = sdf.parse(dates[(int)dataPoint.getX()]);
+            }
+            catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
+
+            String formattedTime = output.format(d);
+
+            Toast.makeText(context, "" + dataPoint.getY() + " kello " + formattedTime, Toast.LENGTH_SHORT).show();
+        });
+
+        graphSeal.addSeries(levelSeries);
+        graphSeat.addSeries(tempSeries);
+
+        graphSeal.setTitle("Päivitetty: " + values[values.length - 1].time);
+        graphSeat.setTitle("Päivitetty: " + values[values.length - 1].time);
+
+        graphSeal.getLegendRenderer().setVisible(true);
+        graphSeal.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graphSeat.getLegendRenderer().setVisible(true);
+        graphSeat.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+
+        graphSeal.getViewport().setXAxisBoundsManual(true);
+        graphSeal.getViewport().setYAxisBoundsManual(true);
+        graphSeal.getViewport().setMaxX(values[values.length - 1].level);
+        graphSeal.getViewport().setMinX(values[0].level);
+        graphSeal.getViewport().setMaxY(maxSealValue + 50);
+        graphSeal.getViewport().setMinY(minSealValue - 50);
+        graphSeal.getViewport().setScalable(true);
+        graphSeal.getGridLabelRenderer().setNumHorizontalLabels(5);
+        graphSeal.getGridLabelRenderer().setHorizontalLabelsAngle(25);
+        graphSeal.getGridLabelRenderer().setVerticalLabelsColor(colorOnBackground); // FIXME: 14.2.2021
         graphSeal.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter()
         {
             @Override
@@ -285,6 +408,16 @@ public class Fragment3 extends Fragment
             }
         });
 
+        graphSeat.getViewport().setXAxisBoundsManual(true);
+        graphSeat.getViewport().setYAxisBoundsManual(true);
+        graphSeat.getViewport().setMaxX(values.length);
+        graphSeat.getViewport().setMinX(0);
+        graphSeat.getViewport().setMaxY(maxTempValue + 2);
+        graphSeat.getViewport().setMinY(minTempValue - 2);
+        graphSeat.getViewport().setScalable(true);
+        graphSeat.getGridLabelRenderer().setNumHorizontalLabels(5);
+        graphSeat.getGridLabelRenderer().setHorizontalLabelsAngle(25);
+        graphSeat.getGridLabelRenderer().setVerticalLabelsColor(colorOnBackground); // FIXME: 14.2.2021
         graphSeat.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter()
         {
             @Override
@@ -299,10 +432,7 @@ public class Fragment3 extends Fragment
                     return super.formatLabel(value, isValueX) + "\u2103";
                 }
             }
-        });
-
-        graphSeat.addSeries(tempSeries);
-        graphSeal.addSeries(levelSeries);
+        });*/
     }
 
     private void ShowInfo()
@@ -375,27 +505,21 @@ public class Fragment3 extends Fragment
             {
                 //get the highest and lowest values in the array
 
-                for(int i = 0; i < levels.length; i++)
-                {
-                    if(levels[i] > maxSealValue)
-                    {
-                        maxSealValue = levels[i];
+                for (Double level : levels) {
+                    if (level > maxSealValue) {
+                        maxSealValue = level;
                     }
-                    if(levels[i] < minSealValue)
-                    {
-                        minSealValue = levels[i];
+                    if (level < minSealValue) {
+                        minSealValue = level;
                     }
                 }
 
-                for(int i = 0; i < temps.length; i++)
-                {
-                    if(temps[i] > maxTempValue)
-                    {
-                        maxTempValue = temps[i];
+                for (Double temp : temps) {
+                    if (temp > maxTempValue) {
+                        maxTempValue = temp;
                     }
-                    if(temps[i] < minTempValue)
-                    {
-                        minTempValue = temps[i];
+                    if (temp < minTempValue) {
+                        minTempValue = temp;
                     }
                 }
 

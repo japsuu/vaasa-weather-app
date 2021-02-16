@@ -25,6 +25,10 @@
     <string name="info_faq_2_answer">-Ilmatieteenlaitoksen avoimesta datasta, jota kuka vain sovelluskehittäjä saa käyttää!</string>
     <string name="info_faq_3">Miten voin raportoida mahdollisesta bugista tai virheestä?</string>
     <string name="info_faq_3_answer">-Paina oikeassa alanurkassa olevaa kirjeenkuvaa, tämä avaa palautelomakkeen!</string>
+    <string name="info_faq_4">Miksi sovelluksen data vaikuttaa aina olevan hieman jäljessä?</string>
+    <string name="info_faq_4_answer">Datassa käytetään UTC aikaa. Se poikkeaa kesäaikana kolme tuntia ja normaaliaikana eli ns. talviaikana 2 tuntia. Esimerkiksi 6 UTC on siis Suomen aikaa kesällä 9 ja talvella 8.</string>
+    <string name="info_faq_5">Mistä voin itse löytää lisätietoa Ilmatieteenlaitoksen avoimesta datasta?</string>
+    <string name="info_faq_5_answer">https://www.ilmatieteenlaitos.fi/kysymyksia-avoimesta-datasta</string>
     <string name="nightmodeSwitch_left">Yötila pois</string>
     <string name="nightmodeSwitch_right">Yötila päällä</string>
     <string name="fragment2_temp_title"><u><b>Lämpötila</b></u></string>
@@ -33,4 +37,5 @@
     <string name="fragment2_temp_lowest">Päivän matalin:</string>
     <string name="fragment3_sealevel_title"><u><b>Veden korkeus</b></u></string>
     <string name="fragment3_seatemp_title"><u><b>Veden lämpötila</b></u></string>
+    <string name="info_kofi"><b>Ko-fi:</b>\nhttps://ko-fi.com/japsu</string>
 </resources>

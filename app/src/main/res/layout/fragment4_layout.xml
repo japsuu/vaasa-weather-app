@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -40,7 +41,8 @@
         <Switch
             android:id="@+id/notificationSwitch"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            tools:ignore="UseSwitchCompatOrMaterialXml">
         </Switch>
         <TextView
             android:layout_width="wrap_content"
@@ -64,7 +66,8 @@
         <Switch
             android:id="@+id/nightmodeSwitch"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            tools:ignore="UseSwitchCompatOrMaterialXml">
         </Switch>
         <TextView
             android:layout_width="wrap_content"
@@ -92,25 +95,29 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/info_kofi"
+                android:autoLink="web"
+                android:clickable="true"
+                android:textIsSelectable="true"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:focusable="true">
+            </TextView>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/info_paypal"
                 android:autoLink="email"
                 android:clickable="true"
                 android:textIsSelectable="true"
                 android:paddingLeft="30dp"
-                android:paddingRight="30dp">
+                android:paddingRight="30dp"
+                android:focusable="true">
             </TextView>
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/info_btc"
-                android:textIsSelectable="true"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp">
-            </TextView>
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/info_ltc"
                 android:textIsSelectable="true"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp">
@@ -133,64 +140,144 @@
                     android:textStyle="bold"
                     android:paddingBottom="10dp">
                 </TextView>
-                <TextView
-                    android:layout_width="fill_parent"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:text="@string/info_faq_1"
-                    android:textStyle="italic">
-                </TextView>
-                <TextView
-                    android:layout_width="fill_parent"
+                    android:orientation="vertical"
+                    android:background="@drawable/linear_custom_border_thin">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="17sp"
+                        android:text="@string/info_faq_1"
+                        android:textStyle="italic">
+                    </TextView>
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:text="@string/info_faq_1_answer"
+                        android:textStyle="bold"
+                        android:paddingBottom="10dp">
+                    </TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:text="@string/info_faq_1_answer"
-                    android:textStyle="bold"
-                    android:paddingBottom="10dp">
-                </TextView>
-                <TextView
-                    android:layout_width="fill_parent"
+                    android:orientation="vertical"
+                    android:background="@drawable/linear_custom_border_thin">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="17sp"
+                        android:text="@string/info_faq_2"
+                        android:textStyle="italic">
+                    </TextView>
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:text="@string/info_faq_2_answer"
+                        android:textStyle="bold"
+                        android:paddingBottom="10dp">
+                    </TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:text="@string/info_faq_2"
-                    android:textStyle="italic">
-                </TextView>
-                <TextView
-                    android:layout_width="fill_parent"
+                    android:orientation="vertical"
+                    android:background="@drawable/linear_custom_border_thin">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="17sp"
+                        android:text="@string/info_faq_3"
+                        android:textStyle="italic">
+                    </TextView>
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:text="@string/info_faq_3_answer"
+                        android:textStyle="bold"
+                        android:paddingBottom="10dp">
+                    </TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:text="@string/info_faq_2_answer"
-                    android:textStyle="bold"
-                    android:paddingBottom="10dp">
-                </TextView>
-                <TextView
-                    android:layout_width="fill_parent"
+                    android:orientation="vertical"
+                    android:background="@drawable/linear_custom_border_thin">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="17sp"
+                        android:text="@string/info_faq_4"
+                        android:textStyle="italic">
+                    </TextView>
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:text="@string/info_faq_4_answer"
+                        android:textStyle="bold"
+                        android:paddingBottom="10dp">
+                    </TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:text="@string/info_faq_3"
-                    android:textStyle="italic">
-                </TextView>
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:text="@string/info_faq_3_answer"
-                    android:textStyle="bold"
-                    android:paddingBottom="10dp">
-                </TextView>
+                    android:orientation="vertical"
+                    android:background="@drawable/linear_custom_border_thin">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="17sp"
+                        android:text="@string/info_faq_5"
+                        android:textStyle="italic">
+                    </TextView>
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="15sp"
+                        android:text="@string/info_faq_5_answer"
+                        android:autoLink="web"
+                        android:clickable="true"
+                        android:textIsSelectable="true"
+                        android:textStyle="bold"
+                        android:paddingBottom="10dp"
+                        android:focusable="true">
+                    </TextView>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
+
+<!--LinearLayout
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:background="@drawable/linear_custom_border_thin">
+
+</LinearLayout-->

@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -38,6 +39,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -45,6 +47,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import java.util.Collections;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 
@@ -110,7 +113,9 @@ public class Fragment2 extends Fragment
 
     private static void BuildGraph(TempData[] values)
     {
-        //get the colorOnBackground color from resources to be used with the graph
+        graph.removeAllSeries();
+
+
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(R.attr.colorOnBackground, typedValue, true);
@@ -128,28 +133,48 @@ public class Fragment2 extends Fragment
             times[i] = values[i].time;
         }
 
-        //clear the graph before we start adding new ones
-        graph.removeAllSeries();
-
-        //create the dataPoint array and fill it up with the data values
         DataPoint[] tempPoints = new DataPoint[values.length];
-
         for (int i = 0; i < values.length; i++) // FIXME: 14.2.2021 some problems could be resolved by changing the x value..?
         {
-            //create point with 'i' as X value, and 'i' of values as Y value
             tempPoints[i] = new DataPoint(i, temps[i]);
         }
-
-        //create the lineGraphSeries from the points
         LineGraphSeries<DataPoint> tempSeries = new LineGraphSeries<>(tempPoints);
 
-        //self explanatory
+
+        graph.setTitle("Päivitetty: " + times[times.length - 1]);
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMaxX(values.length);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMaxY(maxTempValue + 3);
+        graph.getViewport().setMinY(minTempValue - 3);
+        graph.getViewport().setScalable(true);
+        graph.getLegendRenderer().setVisible(true);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graph.getGridLabelRenderer().setNumHorizontalLabels(5);
+        graph.getGridLabelRenderer().setNumVerticalLabels(7);
+        graph.getGridLabelRenderer().setHorizontalLabelsAngle(25);
+        graph.getGridLabelRenderer().setVerticalLabelsColor(colorOnBackground);
+        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter()
+        {
+            @Override
+            public String formatLabel(double value, boolean isValueX)
+            {
+                if (isValueX)
+                {
+                    return times[(int)value];
+                }
+                else
+                {
+                    // show temp for y values
+                    return super.formatLabel(value, isValueX) + "\u2103";
+                }
+            }
+        });
+
+        tempSeries.setTitle("Lämpötila");
         tempSeries.setColor(Color.RED);
-
-        //this too
         tempSeries.setThickness(2);
-
-        //we make the data points 1. visible, 2. big enough to see, 3. clickable!
         tempSeries.setDrawDataPoints(true);
         tempSeries.setDataPointsRadius(4);
         tempSeries.setOnDataPointTapListener((series, dataPoint) ->
@@ -172,50 +197,13 @@ public class Fragment2 extends Fragment
             Toast.makeText(context, "" + dataPoint.getY() + " kello " + formattedTime, Toast.LENGTH_SHORT).show();
         });
 
-        //give the series a title for the legend to render
-        tempSeries.setTitle("Lämpötila");
 
-        //set legend visible and align it
-        graph.getLegendRenderer().setVisible(true);
-        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-
-        //name the graph by the last data update
-        graph.setTitle("Päivitetty: " + times[times.length - 1]);
-
-        // custom label formatter to show temp and degree sign
-        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter()
-        {
-            @Override
-            public String formatLabel(double value, boolean isValueX)
-            {
-                if (isValueX)
-                {
-                    return times[(int)value];
-                }
-                else
-                {
-                    // show temp for y values
-                    return super.formatLabel(value, isValueX) + "\u2103";
-                }
-            }
-        });
-
-        //set the labels colour so that we can see them no matter the background color
-        graph.getGridLabelRenderer().setVerticalLabelsColor(colorOnBackground);
-
-        //set manual bounds, and make the graph scalable, also make sure that the labels are tilted a bit to prevent overlapping
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMaxX(values.length);
-        graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxY(maxTempValue + 3);
-        graph.getViewport().setMinY(minTempValue - 3);
-        graph.getViewport().setScalable(true);
-        graph.getViewport().scrollToEnd();
-        graph.getGridLabelRenderer().setHorizontalLabelsAngle(25);
-
-        //finally, add the series to the graph
         graph.addSeries(tempSeries);
+    }
+
+    private void ResetGraphZoom()
+    {
+        graph.getViewport().scrollToEnd();
     }
 
     private void ShowInfo()
@@ -350,7 +338,6 @@ class DownloadTemperature extends AsyncTask<TaskParams, Integer, TempData[]>
     @Override
     protected TempData[] doInBackground(TaskParams... params)
     {
-        String str = "";
         Document doc = null;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db;
@@ -378,9 +365,6 @@ class DownloadTemperature extends AsyncTask<TaskParams, Integer, TempData[]>
             return null;
         }
 
-        /**
-         * The commented code below is the old temperature data download function.
-         */
         /*
         //get the actual temp elements from the document, and make it more readable
         NodeList results = doc.getElementsByTagName("gml:doubleOrNilReasonTupleList");
