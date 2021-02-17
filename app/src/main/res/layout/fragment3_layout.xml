@@ -49,176 +49,193 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:background="@drawable/linear_custom_border"
-                android:padding="10dp">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="@string/fragment3_sealevel_title"
-                        android:textSize="25sp"
-                        android:textColor="?attr/colorOnBackground"
-                        android:gravity="center"
-                        android:paddingRight="20dp"
-                        android:paddingEnd="20dp"
-                        tools:ignore="RtlSymmetry">
-                    </TextView>
-                </LinearLayout>
+                android:background="@drawable/linear_custom_border">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center"
-                    android:layout_weight="1">
-                    <TextView
-                        android:id="@+id/curSealevel"
+                    android:background="@drawable/linear_custom_border_thin"
+                    android:padding="10dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/fragment3_sealevel_title"
+                            android:textSize="25sp"
+                            android:textColor="?attr/colorOnBackground"
+                            android:gravity="center"
+                            android:paddingRight="20dp"
+                            android:paddingEnd="20dp"
+                            tools:ignore="RtlSymmetry">
+                        </TextView>
+                    </LinearLayout>
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Tämänhetkinen:"
-                        android:textSize="20sp"
-                        android:textColor="?attr/colorOnBackground"
-                        android:gravity="left">
-                    </TextView>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="start"
-                    android:layout_weight="1">
-                    <TextView
-                        android:id="@+id/maxSealevel"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Viiden päivän korkein:"
-                        android:textSize="17sp"
-                        android:textColor="?attr/colorOnBackground"
-                        android:gravity="left">
-                    </TextView>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="start"
-                    android:layout_weight="1">
-                    <TextView
-                        android:id="@+id/minSealevel"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Viiden päivän matalin:"
-                        android:textSize="17sp"
-                        android:textColor="?attr/colorOnBackground"
-                        android:gravity="left">
-                    </TextView>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="@drawable/linear_custom_border"
-                android:padding="10dp">
-                <com.jjoe64.graphview.GraphView
-                    android:id="@+id/sealGraph"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp">
-                </com.jjoe64.graphview.GraphView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="@drawable/linear_custom_border"
-                android:padding="10dp">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="@string/fragment3_seatemp_title"
-                        android:textSize="25sp"
-                        android:textColor="?attr/colorOnBackground"
+                        android:orientation="vertical"
                         android:gravity="center"
-                        android:paddingRight="20dp"
-                        android:paddingEnd="20dp"
-                        tools:ignore="RtlSymmetry">
-                    </TextView>
+                        android:layout_weight="1">
+                        <TextView
+                            android:id="@+id/curSealevel"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Tämänhetkinen:"
+                            android:textSize="20sp"
+                            android:textColor="?attr/colorOnBackground"
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded">
+                        </TextView>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="start"
+                        android:layout_weight="1">
+                        <TextView
+                            android:id="@+id/maxSealevel"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Viiden päivän korkein:"
+                            android:textSize="17sp"
+                            android:textColor="?attr/colorOnBackground"
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded">
+                        </TextView>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="start"
+                        android:layout_weight="1">
+                        <TextView
+                            android:id="@+id/minSealevel"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Viiden päivän matalin:"
+                            android:textSize="17sp"
+                            android:textColor="?attr/colorOnBackground"
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded">
+                        </TextView>
+                    </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center"
-                    android:layout_weight="1">
-                    <TextView
-                        android:id="@+id/curSeatemp"
+                    android:background="@drawable/linear_custom_border_thin"
+                    android:padding="10dp">
+                    <com.jjoe64.graphview.GraphView
+                        android:id="@+id/sealGraph"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Tämänhetkinen:"
-                        android:textSize="20sp"
-                        android:textColor="?attr/colorOnBackground"
-                        android:gravity="left">
-                    </TextView>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="start"
-                    android:layout_weight="1">
-                    <TextView
-                        android:id="@+id/maxSeatemp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Viiden päivän korkein:"
-                        android:textSize="17sp"
-                        android:textColor="?attr/colorOnBackground"
-                        android:gravity="left">
-                    </TextView>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="start"
-                    android:layout_weight="1">
-                    <TextView
-                        android:id="@+id/minSeatemp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Viiden päivän matalin:"
-                        android:textSize="17sp"
-                        android:textColor="?attr/colorOnBackground"
-                        android:gravity="left">
-                    </TextView>
+                        android:layout_height="300dp">
+                    </com.jjoe64.graphview.GraphView>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:background="@drawable/linear_custom_border"
-                android:padding="10dp">
-                <com.jjoe64.graphview.GraphView
-                    android:id="@+id/seatGraph"
+                android:background="@drawable/linear_custom_border">
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="300dp">
-                </com.jjoe64.graphview.GraphView>
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/linear_custom_border_thin"
+                    android:padding="10dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/fragment3_seatemp_title"
+                            android:textSize="25sp"
+                            android:textColor="?attr/colorOnBackground"
+                            android:gravity="center"
+                            android:paddingRight="20dp"
+                            android:paddingEnd="20dp"
+                            tools:ignore="RtlSymmetry">
+                        </TextView>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_weight="1">
+                        <TextView
+                            android:id="@+id/curSeatemp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Tämänhetkinen:"
+                            android:textSize="20sp"
+                            android:textColor="?attr/colorOnBackground"
+                            android:gravity="left">
+                        </TextView>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="start"
+                        android:layout_weight="1">
+                        <TextView
+                            android:id="@+id/maxSeatemp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Viiden päivän korkein:"
+                            android:textSize="17sp"
+                            android:textColor="?attr/colorOnBackground"
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded">
+                        </TextView>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="start"
+                        android:layout_weight="1">
+                        <TextView
+                            android:id="@+id/minSeatemp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Viiden päivän matalin:"
+                            android:textSize="17sp"
+                            android:textColor="?attr/colorOnBackground"
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded">
+                        </TextView>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/linear_custom_border_thin"
+                    android:padding="10dp">
+                    <com.jjoe64.graphview.GraphView
+                        android:id="@+id/seatGraph"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp">
+                    </com.jjoe64.graphview.GraphView>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </com.japsu.vaasaweather.CustomScrollView>

@@ -208,7 +208,7 @@ public class Fragment2 extends Fragment
 
     private void ShowInfo()
     {
-        Toast.makeText(this.getActivity(), "Ilmatieteenlaitos päivittää dataa vain muutamien tuntien välein!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getActivity(), "Ilmatieteenlaitos päivittää dataa vain muutamien tuntien välein! Lue lisää 'info' välilehdeltä.", Toast.LENGTH_LONG).show();
     }
 
     public static void GetTemp()   //TODO: Also make another weather widget for the full week weather
@@ -219,10 +219,6 @@ public class Fragment2 extends Fragment
             ShowProgress();
 
             //new Handler().postDelayed(() -> HideProgress(), 600);
-        }
-        else
-        {
-            Log.d("TEMP", "Progressbar is null");
         }
     }
 

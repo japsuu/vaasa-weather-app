@@ -14,6 +14,7 @@
         <!-- Customize your theme here. -->
         <item name="colorOnBackground">@color/white</item>
         <item name="colorSurface">@color/backgroundElevationDark</item>
+        <item name="colorOnSurface">@color/backgroundElevationDarker</item>
     </style>
 
     <style name="Theme.VaasaWeather.NoActionBar">

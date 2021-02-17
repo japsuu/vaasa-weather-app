@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
             intent.setType("text/html");
             intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"japsu.honkasalo@gmail.com"});
             intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback on Vaasa Weather app!");
-            intent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("<small>App version: " + version + versionCode + "<br/>Device Manufacturer: " + Build.MANUFACTURER + "<br/>Device Model: " + Build.MODEL + "<br/>Android Version: " + Build.VERSION.RELEASE + "</small><br/>Leave the info above untouched, thank you! :)<br/><br/><b>Please write your feedback here:</b>"));
+            intent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("<small>App version: " + version + versionCode + "<br/>Device Manufacturer: " + Build.MANUFACTURER + "<br/>Device Model: " + Build.MODEL + "<br/>Android Version: " + Build.VERSION.RELEASE + "</small><br/>Leave the info above untouched, thank you! :)<br/><br/><b>Please write your feedback here in either Finnish, or English:</b>"));
 
             try
             {
@@ -201,6 +201,10 @@ public class MainActivity extends AppCompatActivity
             //Log.d("NIGHTMODE", "Nightmode is now turned off!");
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+
+        //Let's also update the graph data since it gets reset every time we change mode
+        Fragment2.GetTemp();
+        Fragment3.GetLevel();
     }
 
     /**

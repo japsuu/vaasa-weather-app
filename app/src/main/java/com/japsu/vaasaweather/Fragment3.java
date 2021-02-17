@@ -437,7 +437,7 @@ public class Fragment3 extends Fragment
 
     private void ShowInfo()
     {
-        Toast.makeText(this.getActivity(), "Ilmatieteenlaitos päivittää dataa vain muutamien tuntien välein!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getActivity(), "Ilmatieteenlaitos päivittää dataa vain muutamien tuntien välein! Lue lisää 'info' välilehdeltä.", Toast.LENGTH_LONG).show();
     }
 
     public static void GetLevel()
@@ -448,10 +448,6 @@ public class Fragment3 extends Fragment
             ShowProgress();
 
             //new Handler().postDelayed(() -> HideProgress(), 600);
-        }
-        else
-        {
-            Log.d("SEAL", "Progressbar is null");
         }
     }
 
@@ -505,20 +501,26 @@ public class Fragment3 extends Fragment
             {
                 //get the highest and lowest values in the array
 
-                for (Double level : levels) {
-                    if (level > maxSealValue) {
+                for (Double level : levels)
+                {
+                    if (level > maxSealValue)
+                    {
                         maxSealValue = level;
                     }
-                    if (level < minSealValue) {
+                    if (level < minSealValue)
+                    {
                         minSealValue = level;
                     }
                 }
 
-                for (Double temp : temps) {
-                    if (temp > maxTempValue) {
+                for (Double temp : temps)
+                {
+                    if (temp > maxTempValue)
+                    {
                         maxTempValue = temp;
                     }
-                    if (temp < minTempValue) {
+                    if (temp < minTempValue)
+                    {
                         minTempValue = temp;
                     }
                 }
