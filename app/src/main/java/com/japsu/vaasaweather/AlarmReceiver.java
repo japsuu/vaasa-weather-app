@@ -24,7 +24,7 @@ public class AlarmReceiver extends BroadcastReceiver
     {
         cntxt = context;
         mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Fragment2.GetTemperature(true);
+        Fragment2.GetTemperature(true, false);
         //deliverNotification(context);
     }
 

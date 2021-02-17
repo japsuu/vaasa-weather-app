@@ -29,4 +29,9 @@
     <style name="CustomTabText" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">10sp</item>
     </style>
+
+    <style name="ThemeOverlay.VaasaWeather.AppWidgetContainer" parent="">
+        <item name="appWidgetBackgroundColor">@color/backgroundElevationDarker</item>
+        <item name="appWidgetTextColor">@color/white</item>
+    </style>
 </resources>

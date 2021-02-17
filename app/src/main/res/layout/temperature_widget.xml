@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/widget_margin"
+    android:theme="@style/ThemeOverlay.VaasaWeather.AppWidgetContainer"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:background="@drawable/linear_custom_border_thin">
+    <TextView
+        android:id="@+id/tempWidget_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/appwidget_text"
+        android:textColor="?attr/appWidgetTextColor"
+        android:textSize="24sp">
+    </TextView>
+    <Button
+        android:id="@+id/tempWidget_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tempWidgetBtn"
+        android:textSize="12sp"
+        android:minWidth="80dp">
+    </Button>
+</LinearLayout>

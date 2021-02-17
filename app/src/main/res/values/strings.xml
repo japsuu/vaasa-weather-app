@@ -38,4 +38,7 @@
     <string name="info_faq_4_answer">Datassa käytetään UTC aikaa. Se poikkeaa kesäaikana kolme tuntia ja normaaliaikana eli ns. talviaikana 2 tuntia. Esimerkiksi 6 UTC on siis Suomen aikaa kesällä 9 ja talvella 8.</string>
     <string name="info_faq_5">Mistä voin itse löytää lisätietoa Ilmatieteenlaitoksen avoimesta datasta?</string>
     <string name="info_faq_5_answer">https://www.ilmatieteenlaitos.fi/kysymyksia-avoimesta-datasta</string>
+    <string name="appwidget_text">Haetaan\ndataa…</string>
+    <string name="add_widget">Lämpötila</string>
+    <string name="tempWidgetBtn">Päivitä</string>
 </resources>

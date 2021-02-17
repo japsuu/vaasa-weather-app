@@ -214,7 +214,20 @@ public class Fragment3 extends Fragment
                     }
                     else
                     {
-                        return times[(int)value];
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                        SimpleDateFormat output = new SimpleDateFormat("HH:mm");
+                        Date t = null;
+
+                        try
+                        {
+                            t = sdf.parse(times[(int)value]);
+                        } catch (ParseException e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                        assert t != null;
+                        return output.format(t);
                     }
                 }
                 else

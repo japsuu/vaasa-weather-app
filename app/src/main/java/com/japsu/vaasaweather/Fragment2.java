@@ -73,6 +73,7 @@ public class Fragment2 extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
+        Log.w("FRAGMENT2", "OnCreateView called");
         View view = inflater.inflate(R.layout.fragment2_layout, container, false);
         context = getContext();
         curTempView = (TextView) view.findViewById(R.id.curTemperature);
@@ -162,7 +163,14 @@ public class Fragment2 extends Fragment
             {
                 if (isValueX)
                 {
-                    return times[(int)value];
+                    if((int)value == times.length)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return times[(int)value];
+                    }
                 }
                 else
                 {
@@ -213,7 +221,7 @@ public class Fragment2 extends Fragment
 
     public static void GetTemp()   //TODO: Also make another weather widget for the full week weather
     {
-        GetTemperature(false);
+        GetTemperature(false, false);
         if(updateProgress != null)
         {
             ShowProgress();
@@ -300,13 +308,18 @@ public class Fragment2 extends Fragment
     /**
      *  ALL THE TEMPERATURE DOWNLOAD RELATED STUFF LIES DOWN HERE
      */
+    static boolean isNotif = false;
+    static boolean isWidg = false;
 
-    public static void GetTemperature(boolean isBackgroundTask)
+    public static void GetTemperature(boolean isNotification, boolean isWidget)
     {
+        isNotif = isNotification;
+        isWidg = isWidget;
+
         try
         {
             //start a new async event for downloading the document
-            new DownloadTemperature().execute(new TaskParams(new URL("https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::observations::weather::timevaluepair&place=vaasa&starttime=STARTTIMEHERET00:00:00Z&Parameters=temperature"), isBackgroundTask));
+            new DownloadTemperature().execute(new URL("https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::observations::weather::timevaluepair&place=vaasa&starttime=STARTTIMEHERET00:00:00Z&Parameters=temperature"));
         }
         catch (MalformedURLException e)
         {
@@ -329,10 +342,10 @@ class TempData
     }
 }
 
-class DownloadTemperature extends AsyncTask<TaskParams, Integer, TempData[]>
+class DownloadTemperature extends AsyncTask<URL, Integer, TempData[]>
 {
     @Override
-    protected TempData[] doInBackground(TaskParams... params)
+    protected TempData[] doInBackground(URL... url)
     {
         Document doc = null;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -342,13 +355,13 @@ class DownloadTemperature extends AsyncTask<TaskParams, Integer, TempData[]>
         Date date = new Date();
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        Log.d("TEMP", "Downloading temperature data from: " + params[0].url.toString().replace("STARTTIMEHERE", dateFormatter.format(date)));
+        Log.d("TEMP", "Downloading temperature data from: " + url[0].toString().replace("STARTTIMEHERE", dateFormatter.format(date)));
 
         //try to download the document
         try
         {
             db = dbf.newDocumentBuilder();
-            doc = db.parse(new URL(params[0].url.toString().replace("STARTTIMEHERE", dateFormatter.format(date))).openStream());
+            doc = db.parse(new URL(url[0].toString().replace("STARTTIMEHERE", dateFormatter.format(date))).openStream());
         }
         catch (Exception e)
         {
@@ -422,8 +435,8 @@ class DownloadTemperature extends AsyncTask<TaskParams, Integer, TempData[]>
                                 String time = unformattedTime.substring(unformattedTime.indexOf("T") + 1).replace("Z", "");
                                 Double temp = Double.parseDouble(tempNodes.item(i).getChildNodes().item(j).getChildNodes().item(k + 2).getTextContent());
                                 TempData data = new TempData(unformattedTime, time, temp);
+
                                 result[(i - 1) / 2] = data;
-                                // FIXME: 14.2.2021
                             }
                         }
                     }
@@ -431,18 +444,51 @@ class DownloadTemperature extends AsyncTask<TaskParams, Integer, TempData[]>
             }
         }
 
-        return result;
+        if(Fragment2.isNotif)
+        {
+            double minValue = 99.99;
+            for (TempData tempData : result)
+            {
+                if (tempData.temp < minValue)
+                {
+                    minValue = tempData.temp;
+                }
+            }
+
+            TempData[] res = new TempData[1];
+            result[0].temp = minValue;
+
+            //return the double array to onPostExecute
+            return res;
+        }
+        else if(Fragment2.isWidg)
+        {
+            double val = result[result.length - 1].temp;
+
+            TempData[] res = new TempData[1];
+            result[0].temp = val;
+
+            return res;
+        }
+        else
+        {
+            return result;
+        }
     }
 
     @Override
     protected void onPostExecute(TempData[] result)
     {
-        //if the result contains something, we pass it to the corresponding "page's" (fragment's) handling method, or if the size is only 1 element we know it's a background update 4 a notification!
+        //if the result contains something, we pass it to the corresponding "page's" (fragment's) handling method
         if(result != null)
         {
-            if(result.length == 1)
+            if(Fragment2.isNotif)
             {
                 AlarmReceiver.deliverNotification(AlarmReceiver.cntxt, result[0].temp);
+            }
+            else if(Fragment2.isWidg)
+            {
+                //TemperatureWidget.UpdateWidget(result[0].temp.toString());
             }
             else
             {
