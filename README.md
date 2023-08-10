@@ -1,5 +1,4 @@
 # vaasa-weather-app
-My first proper android studio project:
 Simple weather application, with live graphing.
 
 ---
