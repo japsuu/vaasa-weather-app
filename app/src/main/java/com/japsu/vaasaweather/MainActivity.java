@@ -1,10 +1,6 @@
 package com.japsu.vaasaweather;
 
-import android.app.AlarmManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.UiModeManager;
+import android.app.*;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -15,22 +11,22 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.text.Html;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.text.Html;
-
 import com.japsu.vaasaweather.ui.main.SectionsPagerAdapter;
 
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
+
     static AlarmManager alarmManager = null;
     static PendingIntent notifyPendingIntent = null;
     static Intent notifyIntent = null;
@@ -43,10 +39,8 @@ public class MainActivity extends AppCompatActivity
     public static final int NOTIFICATION_ID = 0;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -108,7 +102,7 @@ public class MainActivity extends AppCompatActivity
         //Notification stuff here too
         createNotificationChannel();
         notifyIntent = new Intent(this, AlarmReceiver.class);
-        notifyPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notifyPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_IMMUTABLE);
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
@@ -130,6 +124,7 @@ public class MainActivity extends AppCompatActivity
             FirstStart();
         }
     }
+
 
     private void FirstStart()
     {

@@ -119,7 +119,7 @@ public class Fragment2 extends Fragment
 
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = context.getTheme();
-        theme.resolveAttribute(R.attr.colorOnBackground, typedValue, true);
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOnBackground, typedValue, true);
         @ColorInt int colorOnBackground = typedValue.data;
 
         //extract items from the data
