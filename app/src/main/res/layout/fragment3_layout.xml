@@ -238,44 +238,44 @@
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/linear_custom_border">
-                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="@drawable/linear_custom_border_thin"
-                    android:padding="10dp">
-                    <TextView
+                    android:background="@drawable/linear_custom_border" tools:visibility="gone">
+                <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Uusin merisää"
-                        android:textSize="25sp"
-                        android:textColor="?attr/colorOnBackground"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
                         android:gravity="center"
-                        android:paddingRight="20dp"
-                        android:paddingEnd="20dp"
-                        tools:ignore="RtlSymmetry">
+                        android:background="@drawable/linear_custom_border_thin"
+                        android:padding="10dp">
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Uusin merisää"
+                            android:textSize="25sp"
+                            android:textColor="?attr/colorOnBackground"
+                            android:gravity="center"
+                            android:paddingRight="20dp"
+                            android:paddingEnd="20dp"
+                            tools:ignore="RtlSymmetry">
                     </TextView>
                 </LinearLayout>
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="@drawable/linear_custom_border_thin"
-                    android:padding="10dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_media_play">
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/linear_custom_border_thin"
+                        android:padding="10dp">
+                    <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@android:drawable/ic_media_play">
                     </ImageView>
                     <SeekBar
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content">
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content">
                     </SeekBar>
                 </LinearLayout>
             </LinearLayout>
